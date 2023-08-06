@@ -50,7 +50,7 @@ dependencies:
   intl: ^0.18.1
   faker: ^2.1.0
   flutter_tts: ^3.7.0
-  js: ^0.6.7
+  cloud_firestore: ^4.8.4
 
 dev_dependencies:
   flutter_test:

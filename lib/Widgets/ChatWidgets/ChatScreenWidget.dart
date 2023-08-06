@@ -1,8 +1,13 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:convert_lang_app/Providers/UserProviders.dart';
 import 'package:convert_lang_app/Widgets/ChatWidgets/ChatMessageBox.dart';
 import 'package:convert_lang_app/Widgets/ChatWidgets/ChatMessageWidget.dart';
+import 'package:convert_lang_app/Widgets/FireBaseLibrary/FireBaseHelper.dart';
 import 'package:faker/faker.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:provider/provider.dart';
 
 class ChatScreen extends StatefulWidget {
   ChatScreen();
@@ -13,6 +18,7 @@ class ChatScreen extends StatefulWidget {
 
 class _ChatScreenState extends State<ChatScreen> {
   List<ChatMessage> messages = [];
+  User? user = null;
 
   void _onUserWriteMessage(String message,bool isAudio,bool isSender) async {
     _sendMessage(message,isAudio,isSender);
@@ -24,6 +30,10 @@ class _ChatScreenState extends State<ChatScreen> {
 
   void _sendMessage(String message,bool isAudio,bool isSender) async {
     final appDir = await getApplicationDocumentsDirectory();
+
+    var user = Provider.of<UserProvider>(context).user;
+
+    FireBaseHelper.setChatMessage(message.trim(), user!.uid);
 
     setState(() {
       messages.add(ChatMessage(
@@ -38,6 +48,7 @@ class _ChatScreenState extends State<ChatScreen> {
 
   @override
   Widget build(BuildContext context) {
+
     return Scaffold(
       appBar: AppBar(
         title: Text('New Chat'),

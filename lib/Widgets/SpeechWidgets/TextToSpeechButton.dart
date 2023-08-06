@@ -1,10 +1,9 @@
-import 'package:js/js.dart';
+import 'dart:async';
 import 'dart:io' show Platform;
 import 'package:flutter/foundation.dart' show kIsWeb;
 
 import 'package:flutter/material.dart';
 import 'package:flutter_tts/flutter_tts.dart';
-import 'package:flutter_tts/flutter_tts_web.dart';
 
 class TextToSpeechButton extends StatefulWidget {
   final String text;
@@ -14,7 +13,7 @@ class TextToSpeechButton extends StatefulWidget {
 
   TextToSpeechButton({
     required this.text,
-    this.buttonColor = Colors.blue,
+    this.buttonColor = Colors.black,
     this.buttonWidth = 40.0,
     this.textStyle = const TextStyle(color: Colors.white, fontSize: 18),
   });
@@ -22,6 +21,8 @@ class TextToSpeechButton extends StatefulWidget {
   @override
   State<TextToSpeechButton> createState() => _TextToSpeechButtonState();
 }
+
+enum TtsState { playing, stopped, paused, continued }
 
 class _TextToSpeechButtonState extends State<TextToSpeechButton> {
   late FlutterTts flutterTts;
@@ -59,7 +60,7 @@ class _TextToSpeechButtonState extends State<TextToSpeechButton> {
     if (isAndroid) {
       _getDefaultEngine();
       _getDefaultVoice();
-    }
+     }
 
     flutterTts.setStartHandler(() {
       setState(() {
@@ -149,7 +150,7 @@ class _TextToSpeechButtonState extends State<TextToSpeechButton> {
       child: IconButton(
         icon: Icon(Icons.volume_up),
         onPressed: _speakText,
-        color: widget.buttonColor,
+        color: ttsState == TtsState.stopped ? widget.buttonColor : Colors.blue
       ),
     );
   }
